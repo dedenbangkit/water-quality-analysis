@@ -97,7 +97,6 @@ class Cards extends Component {
             <Slider
                 defaultValue={50}
                 trackStyle={{ backgroundColor: '#17a2b8', height: 10 }}
-                reverse
                 dots
                 dotStyle={{
                   borderColor: '#c3c3c3',
@@ -156,7 +155,11 @@ class Cards extends Component {
 
 	mandatoryIcon(id) {
 		let this_question = this.props.value.questions.find(x => {return x.id === id})
-		let icon = (this_question.answer ? "fa-check-circle" : "fa-exclamation-triangle");
+        let icon = (this_question.answer ? "fa-check-circle" : (
+                this_question.mandatory === 1 ? "fa-exclamation-triangle" :
+                "fa-keyboard"
+            )
+        );
 		return icon;
 	}
 

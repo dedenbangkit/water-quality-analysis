@@ -13192,12 +13192,17 @@ body {
 .btn-ready {
 	margin-left: 20px;
 }
+.btn-info {
+    color: #FFF;
+}
+
 .fa-exclamation-triangle{
 	color:red;
 	position: absolute;
 	right: 10px;
 	top: 15px;
 }
+.fa-keyboard,
 .fa-check-circle{
 	color:green;
 	position: absolute;
@@ -13211,4 +13216,19 @@ body {
 }
 .fas-center{
 	position:inherit;
+}
+.fas-opening{
+	display:inline-block;
+    width: 2rem;
+    vertical-align: top;
+    color: #23923d;
+    margin-top: .5rem;
+}
+.opening-list{
+	display:inline-block;
+    width: 90%;
+}
+.list-group-item{
+    border:none;
+    padding:.5rem;
 }

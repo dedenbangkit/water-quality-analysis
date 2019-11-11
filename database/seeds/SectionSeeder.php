@@ -20,19 +20,28 @@ class SectionSeeder extends Seeder
         ]);
 
         $q1 =  new App\Question([
-                "question"=>"What is your age group ?",
-                "type"=>"option"
+                "question"=>"Age group",
+                "type"=>"option",
+                "mandatory"=>true,
         ]);
         $q2 =  new App\Question([
-                "question"=>"What is your highest level of education ?",
-                "type"=>"option"
+                "question"=>"Edicational Level",
+                "type"=>"option",
+                "mandatory"=>true,
         ]);
         $q3 =  new App\Question([
-                "question"=>"What is your general knowledge level of digital communication tools?",
-                "type"=>"option"
+                "question"=>"What is your general knowledge level of digital communication tools ?",
+                "type"=>"option",
+                "mandatory"=>true,
         ]);
 
-        $s1->question()->saveMany([ $q1, $q2, $q3 ]);
+        $q4 =  new App\Question([
+                "question"=>"What is your general knowledge level of water quality?",
+                "type"=>"option",
+                "mandatory"=>true,
+        ]);
+
+        $s1->question()->saveMany([ $q1, $q2, $q3, $q4]);
 
         App\Question::find(1)->option()->saveMany([
             new App\Option(["text"=>"<18"]),
@@ -58,56 +67,64 @@ class SectionSeeder extends Seeder
             new App\Option(["text"=>"Advanced"]),
         ]);
 
-        $this->chartSection(
+        App\Question::find(4)->option()->saveMany([
+            new App\Option(["text"=>"No knowledge"]),
+            new App\Option(["text"=>"Basic"]),
+            new App\Option(["text"=>"Intermediate"]),
+            new App\Option(["text"=>"Advanced"]),
+        ]);
+
+
+        $this->chartSectionOne(
             "https://public.tableau.com/views/Waterqualitydatavisualisations/Verticalbarchart?:display_count=y&:origin=viz_share_link",
             "Vertical Bar Chart",
-            5,
+            6,
         );
 
-        $this->chartSection(
+        $this->chartSectionOne(
             "https://public.tableau.com/views/Waterqualitydatavisualisations/Horizontalbarchart?:display_count=y&:origin=viz_share_link",
             "Horizontal Bar Chart",
-            15,
+            17,
         );
 
-        $this->chartSection(
+        $this->chartSectionOne(
             "https://public.tableau.com/views/Waterqualitydatavisualisations/Verticaldotplot?:display_count=y&:origin=viz_share_link",
             "Vertical Dot Plot",
-            25,
+            28,
         );
 
-        $this->chartSection(
+        $this->chartSectionOne(
             "https://public.tableau.com/views/Waterqualitydatavisualisations/Horizontaldotplot?:display_count=y&:origin=viz_share_link",
             "Horizontal Dot Plot",
-            35,
+            39,
         );
 
-        $this->chartSection(
+        $this->chartSectionTwo(
             "https://public.tableau.com/views/Waterqualitydatavisualisations/Matrixtable?:display_count=y&:origin=viz_share_link",
             "Matrix Table",
-            45,
+            50,
         );
 
-        $this->chartSection(
+        $this->chartSectionTwo(
             "https://public.tableau.com/views/Waterqualitydatavisualisations/BoxPlot?:display_count=y&:origin=viz_share_link",
             "Box Plot",
-            55,
+            61,
         );
 
-        $this->chartSection(
+        $this->chartSectionTwo(
             "https://public.tableau.com/views/Waterqualitydatavisualisations/LineChart?:display_count=y&:origin=viz_share_link",
             "Line Chart",
-            65,
+            72,
         );
 
-        $this->chartSection(
+        $this->chartSectionTwo(
             "https://public.tableau.com/views/Waterqualitydatavisualisations/Smallmultiples_1?:display_count=y&:origin=viz_share_link",
             "Small Multiples",
-            75,
+            83,
         );
     }
 
-    public function chartSection($url, $text, $index) {
+    public function chartSectionOne($url, $text, $index) {
 
         $section = new App\Section();
 
@@ -118,51 +135,157 @@ class SectionSeeder extends Seeder
         ]);
 
         $q1 =  new App\Question([
-                "question"=>"Where is the water quality risk the highest?",
-                "before"=>"Activity Based Question",
-                "type"=>"text"
+                "question"=>"At what sample point is the water quality rating the lowest",
+                "before"=>"Activity Based Question | Please have a look at the data visualisation above and answer the following attributes;",
+                "type"=>"text",
+                "mandatory"=>true,
         ]);
         $q2 =  new App\Question([
                 "question"=>"How difficult was it to find the answer to this question?",
-                "type"=>"option"
+                "type"=>"option",
+                "mandatory"=>true,
         ]);
         $q3 =  new App\Question([
-                "question"=>"What is the value at point X within water quality standards?",
-                "type"=>"text"
+                "question"=>"What is the water quality value of the Dodgeburg sample point in the region of Rocester?",
+                "type"=>"text",
+                "mandatory"=>true,
         ]);
         $q4 =  new App\Question([
-                "question"=>"Obstructive Supportive",
-                "before"=>"Please assess the visualisation and indicate how you find regarding",
-                "type"=>"slider"
+                "question"=>"How difficult was it to find the answer to this question?",
+                "type"=>"option",
+                "mandatory"=>true,
         ]);
         $q5 =  new App\Question([
-                "question"=>"Complicated Easy",
-                "type"=>"slider"
+                "question"=>"Obstructive Supportive",
+                "before"=>"Likert Scale Questions | Please assess the visualisation and indicate how you find regarding",
+                "type"=>"slider",
+                "mandatory"=>true,
         ]);
         $q6 =  new App\Question([
-                "question"=>"Inefficient Efficient",
-                "type"=>"slider"
+                "question"=>"Complicated Easy",
+                "type"=>"slider",
+                "mandatory"=>true,
         ]);
         $q7 =  new App\Question([
-                "question"=>"Confusing Clear",
-                "type"=>"slider"
+                "question"=>"Inefficient Efficient",
+                "type"=>"slider",
+                "mandatory"=>true,
         ]);
         $q8 =  new App\Question([
-                "question"=>"Boring Exciting",
-                "type"=>"slider"
+                "question"=>"Confusing Clear",
+                "type"=>"slider",
+                "mandatory"=>true,
         ]);
         $q9 =  new App\Question([
-                "question"=>"Conventional Inventive",
-                "type"=>"slider"
+                "question"=>"Boring Exciting",
+                "type"=>"slider",
+                "mandatory"=>true,
         ]);
         $q10 =  new App\Question([
-                "question"=>"Please write below if you have any other comments concerning the visualisation shown",
-                "type"=>"textarea"
+                "question"=>"Conventional Inventive",
+                "type"=>"slider",
+                "mandatory"=>true,
+        ]);
+        $q11 =  new App\Question([
+                "question"=>"Comments",
+                "type"=>"textarea",
+                "mandatory"=>false,
         ]);
 
-        $s2->question()->saveMany([$q1, $q2, $q3, $q4, $q5, $q6, $q7, $q8, $q9, $q10]);
+        $s2->question()->saveMany([$q1, $q2, $q3, $q4, $q5, $q6, $q7, $q8, $q9, $q10, $q11]);
 
         App\Question::find($index)->option()->saveMany([
+            new App\Option(["text"=>"Easy to find"]),
+            new App\Option(["text"=>"Not easy, not hard to find"]),
+            new App\Option(["text"=>"Hard to find"]),
+        ]);
+
+        App\Question::find(($index + 2))->option()->saveMany([
+            new App\Option(["text"=>"Easy to find"]),
+            new App\Option(["text"=>"Not easy, not hard to find"]),
+            new App\Option(["text"=>"Hard to find"]),
+        ]);
+
+        return true;
+    }
+
+    public function chartSectionTwo($url, $text, $index) {
+
+        $section = new App\Section();
+
+        $s2 = $section->create([
+            "text" => $text,
+            "icon" => "chart-bar",
+            "visual" => $url 
+        ]);
+
+        $q1 =  new App\Question([
+                "question"=>"What is the lowest value measured in this overview?",
+                "before"=>"Activity Based Question | Please have a look at the data visualisation above and answer the following attributes;",
+                "type"=>"text",
+                "mandatory"=>true,
+        ]);
+        $q2 =  new App\Question([
+                "question"=>"How difficult was it to find the answer to this question?",
+                "type"=>"option",
+                "mandatory"=>true,
+        ]);
+        $q3 =  new App\Question([
+                "question"=>"Where is the water quality overall the best ?",
+                "type"=>"text",
+                "mandatory"=>true,
+        ]);
+        $q4 =  new App\Question([
+                "question"=>"How difficult was it to find the answer to this question?",
+                "type"=>"option",
+                "mandatory"=>true,
+        ]);
+        $q5 =  new App\Question([
+                "question"=>"Obstructive Supportive",
+                "before"=>"Likert Scale Questions | Please assess the visualisation and indicate how you find regarding",
+                "type"=>"slider",
+                "mandatory"=>true,
+        ]);
+        $q6 =  new App\Question([
+                "question"=>"Complicated Easy",
+                "type"=>"slider",
+                "mandatory"=>true,
+        ]);
+        $q7 =  new App\Question([
+                "question"=>"Inefficient Efficient",
+                "type"=>"slider",
+                "mandatory"=>true,
+        ]);
+        $q8 =  new App\Question([
+                "question"=>"Confusing Clear",
+                "type"=>"slider",
+                "mandatory"=>true,
+        ]);
+        $q9 =  new App\Question([
+                "question"=>"Boring Exciting",
+                "type"=>"slider",
+                "mandatory"=>true,
+        ]);
+        $q10 =  new App\Question([
+                "question"=>"Conventional Inventive",
+                "type"=>"slider",
+                "mandatory"=>true,
+        ]);
+        $q11 =  new App\Question([
+                "question"=>"Comments",
+                "type"=>"textarea",
+                "mandatory"=>false,
+        ]);
+
+        $s2->question()->saveMany([$q1, $q2, $q3, $q4, $q5, $q6, $q7, $q8, $q9, $q10, $q11]);
+
+        App\Question::find($index)->option()->saveMany([
+            new App\Option(["text"=>"Easy to find"]),
+            new App\Option(["text"=>"Not easy, not hard to find"]),
+            new App\Option(["text"=>"Hard to find"]),
+        ]);
+
+        App\Question::find(($index + 2))->option()->saveMany([
             new App\Option(["text"=>"Easy to find"]),
             new App\Option(["text"=>"Not easy, not hard to find"]),
             new App\Option(["text"=>"Hard to find"]),

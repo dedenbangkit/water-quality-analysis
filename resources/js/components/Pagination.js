@@ -45,7 +45,7 @@ class Pagination extends Component {
                             type="button"
                             className={this.props.value.page === 1 ? "btn btn-secondary" : "btn btn-info"}
                             onClick={this.prev}
-                        ><strong>Prev</strong></button>
+                        ><strong><i className="fas fa-arrow-alt-circle-left"></i> Prev</strong></button>
                         <button
                             type="button"
                             className={
@@ -54,7 +54,7 @@ class Pagination extends Component {
                                 )
                             }
                             onClick={this.props.value.group.complete ? this.next : this.nextalert}
-                        ><strong>Next</strong></button>
+                        ><strong>Next <i className="fas fa-arrow-alt-circle-right"></i></strong></button>
                     </div>
                     <Submit show={this.props.value.page < this.props.value.sections.length ? "hidden" : ""} />
                     </div>

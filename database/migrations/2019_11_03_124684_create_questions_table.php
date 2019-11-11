@@ -19,6 +19,7 @@ class CreateQuestionsTable extends Migration
             $table->text('question');
             $table->text('before')->nullable()->default(null);
             $table->enum('type', ['text','number','textarea','option','slider']);
+            $table->boolean('mandatory');
             $table->timestamps();
         });
 

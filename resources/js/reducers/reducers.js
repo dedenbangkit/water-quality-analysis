@@ -16,6 +16,7 @@ const initialState = {
 		type: "text",
         show: true,
         answer: false,
+        mandatory: 0,
         page: 1
     }],
 	submit: false,
@@ -53,7 +54,8 @@ const showSection = (state, data, change) => {
     });
 	let group = section.find(x => x.show)
     const questionGroup = question.filter(x => {return x.section_id === group.id})
-    const questionAnswered = questionGroup.filter(x => {return x.answer})
+        .filter(x => {return x.mandatory})
+    const questionAnswered = question.filter(x => {return x.answer})
     const isComplete = (questionGroup.length === questionAnswered.length)
     let updatedGroup = group;
     if (isComplete) {
@@ -81,8 +83,9 @@ const updateAnswer = (state, data) => {
 }
 
 const updateGroup = (group, questions) => {
-    const questionAnswered = questions.filter(x => {return x.answer})
-    const isComplete = (questions.length === questionAnswered.length)
+    const questionGroup = questions.filter(x => {return x.mandatory})
+    const questionAnswered = questionGroup.filter(x => {return x.answer})
+    const isComplete = (questionGroup.length === questionAnswered.length)
     let updatedGroup = group;
     if (isComplete) {
         updatedGroup = {
@@ -99,7 +102,7 @@ const completeGroup = (state, data, group) => {
             x.answer = data.answer;
         }
         return x;
-    }).filter(x => {return x.section_id == group.id});
+    }).filter(x => {return x.section_id == group.id}).filter(x => {return x.mandatory});
     const questionAnswered = questionGroup.filter(x => {return x.answer})
     const isComplete = (questionGroup.length === questionAnswered.length)
     let updatedGroup = group;

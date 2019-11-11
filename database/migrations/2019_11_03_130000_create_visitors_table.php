@@ -15,7 +15,9 @@ class CreateVisitorsTable extends Migration
     {
         Schema::create('visitors', function (Blueprint $table) {
             $table->bigIncrements('id');
-			$table->text('user_agent');
+			$table->text('browser');
+			$table->text('device');
+			$table->text('os');
             $table->timestamps();
         });
     }

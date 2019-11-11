@@ -17,8 +17,16 @@ class CreateAnswersTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('question_id')->unsigned();
             $table->bigInteger('visitor_id')->unsigned();
+            $table->bigInteger('section_id')->unsigned();
             $table->text('value');
             $table->timestamps();
+        });
+
+        Schema::table('answers', function (Blueprint $table) {
+                $table->foreign('section_id')
+                    ->references('id')
+                    ->on('sections')
+                    ->onDelete('cascade');
         });
 
         Schema::table('answers', function (Blueprint $table) {

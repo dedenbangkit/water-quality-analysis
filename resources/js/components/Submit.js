@@ -11,13 +11,17 @@ class Submit extends Component {
 		this.state = {};
     }
 
-    submit(isReady) {
+    send() {
+        let mandatoryQuestions = this.props.value.questions.filter(x => {return x.mandatory});
+        let isReady = (mandatoryQuestions.length === mandatoryQuestions.filter(x => {
+            return x.answer;
+        }).length)
+        console.log(isReady);
 		if(isReady) {
 			axios.post("/api/submit", {data: this.props.value.questions, user: this.state})
 			.then( res => { return res; })
 			.then( res => { return res; })
-			.then( res => { return this.alertOutro(); })
-			.then( res => { window.location.replace("/end"); });
+            .then( res => { window.location.replace("/end"); });
 		}
     }
 
@@ -26,7 +30,8 @@ class Submit extends Component {
     }
 
     render() {
-        let isReady = (this.props.value.questions.length === this.props.value.questions.filter(x => {
+        let mandatoryQuestions = this.props.value.questions.filter(x => {return x.mandatory});
+        let isReady = (mandatoryQuestions.length === mandatoryQuestions.filter(x => {
             return x.answer;
         }).length)
         let cname = isReady ? "btn btn-info" : "btn btn-secondary"
@@ -35,7 +40,8 @@ class Submit extends Component {
                 <button
                     type="button"
                     className={cname}
-                    onClick={this.submit.bind(this)}
+                    onClick={this.send.bind(this)}
+                    disabled={(isReady? false : true)}
                 >
                     <strong>Submit</strong>
                 </button>

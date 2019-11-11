@@ -11,10 +11,19 @@
 |
 */
 
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('start');
+});
+
+Route::get('/survey', function () {
+    return view('survey');
 });
 
 Route::get('/end', function () {
     return view('thanks');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

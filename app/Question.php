@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    protected $fillable = ["text", "type", "before"];
+    protected $fillable = ["text", "type", "before", "mandatory"];
     protected $hidden = ["created_at", "updated_at"];
 
     public function section() {
