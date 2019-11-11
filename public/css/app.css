@@ -13583,7 +13583,7 @@ a.text-muted:hover {
 
 .container-progress {
 	width: 90%;
-	margin: 0 10%;
+	margin: 0 5%;
     position: absolute;
     z-index: 1;
     left: 0;
@@ -13595,7 +13595,7 @@ a.text-muted:hover {
 }
 .progressbar li{
     float: left;
-    width: 10%;
+    width: 33.3333%;
     position: relative;
     text-align: center;
     list-style:none;
@@ -13673,12 +13673,18 @@ h2.page-title {
 }
 
 @media (min-width: 768px) {
-  .wrapper {
-	margin-top: 136px;
-  }
-  .col-md-8 {
-	min-width: 720px;
-  }
+    .wrapper {
+        margin-top: 136px;
+    }
+    .col-md-8 {
+        min-width: 720px;
+    }
+}
+@media (max-width: 768px) {
+    .slider-text{
+        display:inline-block;
+        width: 33.333%;
+    }
 }
 
 body {
@@ -13692,6 +13698,26 @@ body {
 }
 .btn-ready {
 	margin-left: 20px;
+}
+.fa-exclamation-triangle{
+	color:red;
+	position: absolute;
+	right: 10px;
+	top: 15px;
+}
+.fa-check-circle{
+	color:green;
+	position: absolute;
+	right: 10px;
+	top: 15px;
+}
+.slider-col{
+	margin-bottom: 10px;
+    text-align: center;
+    display: block;
+}
+.fas-center{
+	position:inherit;
 }
 body {
   height: 100%;

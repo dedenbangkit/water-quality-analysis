@@ -7,17 +7,23 @@ class Pagination extends Component {
     constructor(props) {
         super(props);
         this.next = this.next.bind(this);
+        this.nextalert = this.nextalert.bind(this);
         this.prev = this.prev.bind(this);
     }
 
     next() {
+        this.props.updateGroup()
+        console.log(this.props.value.group)
         const change = this.props.value.page === this.props.value.sections.length ? false : true
-        console.log("next")
         if (change) {
             this.props.changeGroup(this.props.value.page + 1);
             window.scrollTo(0, 0)
         }
         return change;
+    }
+
+    nextalert() {
+        console.log("alert");
     }
 
     prev() {
@@ -42,8 +48,12 @@ class Pagination extends Component {
                         ><strong>Prev</strong></button>
                         <button
                             type="button"
-                            className={this.props.value.page === this.props.value.sections.length ? "btn btn-secondary" : "btn btn-info"}
-                            onClick={this.next}
+                            className={
+                                (this.props.value.sections.length === this.props.value.group.page ? "btn btn-secondary" :
+                                    (this.props.value.group.complete ?  "btn btn-info" : "btn btn-secondary")
+                                )
+                            }
+                            onClick={this.props.value.group.complete ? this.next : this.nextalert}
                         ><strong>Next</strong></button>
                     </div>
                     <Submit show={this.props.value.page < this.props.value.sections.length ? "hidden" : ""} />

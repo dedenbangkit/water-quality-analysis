@@ -41,6 +41,7 @@ class Page extends Component {
                 return this.props.loadGroup(data)
             }
         );
+        // axios.get('http://geolocation-db.com/json/').then(res => {console.log(res.data)});
     }
 
     render() {

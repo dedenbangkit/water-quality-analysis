@@ -14,8 +14,8 @@ class ProgressBar extends Component {
             let list = section.map(x => {
                 return (
                     <li
-                        key={'progress' + x.id}
-                        className={(this.props.value.page >= (x.id + 1) ? "active": "")}
+                        key={'progress' + x.page}
+                        className={(this.props.value.page >= (x.page + 1) ? "active": "")}
                     >
                     </li>
                 );

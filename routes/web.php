@@ -15,9 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/table-vertical', function() {
-    return view('tableau.vertical');
-});
-Route::get('/table-horizontal', function() {
-    return view('tableau.horizontal');
+Route::get('/end', function () {
+    return view('thanks');
 });

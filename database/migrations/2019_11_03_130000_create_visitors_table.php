@@ -15,10 +15,7 @@ class CreateVisitorsTable extends Migration
     {
         Schema::create('visitors', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->enum('title', ['Mr','Mrs']);
-            $table->text('first_name');
-            $table->text('last_name');
-            $table->text('occupation');
+			$table->text('user_agent');
             $table->timestamps();
         });
     }

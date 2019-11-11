@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux'
 import { mapStateToProps, mapDispatchToProps } from '../reducers/actions.js'
-import Slider, { createSliderWithTooltip } from 'rc-slider';
+import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 class Cards extends Component {
@@ -14,9 +14,12 @@ class Cards extends Component {
         this.getInput = this.getInput.bind(this);
         this.getSlider = this.getSlider.bind(this);
         this.handleAnswer = this.handleAnswer.bind(this);
+        this.handleSlider = this.handleSlider.bind(this);
+        this.mandatoryIcon = this.mandatoryIcon.bind(this);
         this.state = {
             selectedOption: "",
-            value: ""
+            value: "",
+			icon: "fa fa-exlamation-triangle"
         }
     }
 
@@ -33,7 +36,19 @@ class Cards extends Component {
             id: parseInt(target.name.replace("answer-","")),
             answer: target.value
         });
-        console.log(this.props.value.questions);
+    }
+
+    handleSlider(value, i) {
+		console.log(value);
+        const name = "answer-" + i;
+        this.setState({
+          [name]: value
+        });
+        localStorage.setItem(name, value);
+        this.props.reduceAnswer({
+            id: parseInt(name.replace("answer-","")),
+            answer: value
+        });
     }
 
     getInput(id) {
@@ -65,14 +80,17 @@ class Cards extends Component {
         let guide = answer.question.split(" ");
         return (
             <Fragment>
+				<div className="row slider-col">
+					<i className={"fas " + this.mandatoryIcon(answer.id) + " fas-center"}/>
+				</div>
                 <div className="row">
-                    <div className="col-sm-4 text-left text-bold">
+                    <div className="col-sm-4 text-left text-bold slider-text">
                         {guide[0]}
                     </div>
-                    <div className="col-sm-4 text-center text-bold">
+                    <div className="col-sm-4 text-center text-bold slider-text">
                         Neutral
                     </div>
-                    <div className="col-sm-4 text-right text-bold">
+                    <div className="col-sm-4 text-right text-bold slider-text">
                         {guide[1]}
                     </div>
                 </div>
@@ -99,6 +117,7 @@ class Cards extends Component {
                   backgroundColor: '#fefefe',
                 }}
                 railStyle={{ backgroundColor: '#6c757d', height: 10 }}
+                onChange={(props) => this.handleSlider(props, answer.id)}
             />
             </Fragment>
         )
@@ -135,6 +154,12 @@ class Cards extends Component {
         }
     }
 
+	mandatoryIcon(id) {
+		let this_question = this.props.value.questions.find(x => {return x.id === id})
+		let icon = (this_question.answer ? "fa-check-circle" : "fa-exclamation-triangle");
+		return icon;
+	}
+
     showIntro(text) {
         return (
             <div className="card card-success">
@@ -159,6 +184,7 @@ class Cards extends Component {
                             <div className="card card-secondary card-outline">
                                 <div className={title ? "card-header text-bold" : "hidden"}>
                                     {x.question}
+									<i className={"fas " + this.mandatoryIcon(x.id)}/>
                                 </div>
                                 <div className="card-body">
                                     {this.getAnswerType(x)}

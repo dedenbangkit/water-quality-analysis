@@ -10,7 +10,7 @@ class HeaderGroup extends Component {
         this.getLoading = this.getLoading.bind(this);
         this.showLoading = this.showLoading.bind(this);
 		this.state = {
-			_isLoading:true
+			_isLoading:(this.props.value.pages === 1 ? true : false)
 		}
     }
 
@@ -36,7 +36,7 @@ class HeaderGroup extends Component {
 
     render() {
         return (
-            <div className="container-fluid" key={"page-" + this.props.data.id}>
+            <div className="container-fluid" key={"page-" + this.props.data.page}>
                 <div className="row justify-content-center">
                     <div className="col-md-8 col-sm-12">
                         <div className="card card-info">

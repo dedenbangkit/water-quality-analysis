@@ -18,6 +18,9 @@ export const mapDispatchToProps = (dispatch) => {
             type: "REDUCE ANSWER",
             data: data
         }),
+        updateGroup: () => dispatch({
+            type: "UPDATE GROUP",
+        }),
         checkSubmission: () => dispatch({
             type: "CHECK SUBMISSION"
         }),

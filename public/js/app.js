@@ -96917,9 +96917,12 @@ function (_Component) {
     _this.getInput = _this.getInput.bind(_assertThisInitialized(_this));
     _this.getSlider = _this.getSlider.bind(_assertThisInitialized(_this));
     _this.handleAnswer = _this.handleAnswer.bind(_assertThisInitialized(_this));
+    _this.handleSlider = _this.handleSlider.bind(_assertThisInitialized(_this));
+    _this.mandatoryIcon = _this.mandatoryIcon.bind(_assertThisInitialized(_this));
     _this.state = {
       selectedOption: "",
-      value: ""
+      value: "",
+      icon: "fa fa-exlamation-triangle"
     };
     return _this;
   }
@@ -96936,7 +96939,18 @@ function (_Component) {
         id: parseInt(target.name.replace("answer-", "")),
         answer: target.value
       });
-      console.log(this.props.value.questions);
+    }
+  }, {
+    key: "handleSlider",
+    value: function handleSlider(value, i) {
+      console.log(value);
+      var name = "answer-" + i;
+      this.setState(_defineProperty({}, name, value));
+      localStorage.setItem(name, value);
+      this.props.reduceAnswer({
+        id: parseInt(name.replace("answer-", "")),
+        answer: value
+      });
     }
   }, {
     key: "getInput",
@@ -96964,15 +96978,21 @@ function (_Component) {
   }, {
     key: "getSlider",
     value: function getSlider(answer) {
+      var _this2 = this;
+
       var guide = answer.question.split(" ");
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row slider-col"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas " + this.mandatoryIcon(answer.id) + " fas-center"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-sm-4 text-left text-bold"
+        className: "col-sm-4 text-left text-bold slider-text"
       }, guide[0]), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-sm-4 text-center text-bold"
+        className: "col-sm-4 text-center text-bold slider-text"
       }, "Neutral"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-sm-4 text-right text-bold"
+        className: "col-sm-4 text-right text-bold slider-text"
       }, guide[1])), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(rc_slider__WEBPACK_IMPORTED_MODULE_3__["default"], {
         defaultValue: 50,
         trackStyle: {
@@ -97001,13 +97021,16 @@ function (_Component) {
         railStyle: {
           backgroundColor: '#6c757d',
           height: 10
+        },
+        onChange: function onChange(props) {
+          return _this2.handleSlider(props, answer.id);
         }
       }));
     }
   }, {
     key: "getOption",
     value: function getOption(options, id) {
-      var _this2 = this;
+      var _this3 = this;
 
       return options.map(function (x) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -97018,8 +97041,8 @@ function (_Component) {
           type: "radio",
           name: "answer-" + id,
           value: x.text,
-          onChange: _this2.handleAnswer,
-          checked: x.text === _this2.state["answer-" + id]
+          onChange: _this3.handleAnswer,
+          checked: x.text === _this3.state["answer-" + id]
         }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
           className: "form-check-label"
         }, x.text));
@@ -97043,6 +97066,15 @@ function (_Component) {
       }
     }
   }, {
+    key: "mandatoryIcon",
+    value: function mandatoryIcon(id) {
+      var this_question = this.props.value.questions.find(function (x) {
+        return x.id === id;
+      });
+      var icon = this_question.answer ? "fa-check-circle" : "fa-exclamation-triangle";
+      return icon;
+    }
+  }, {
     key: "showIntro",
     value: function showIntro(text) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -97054,7 +97086,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       return this.props.value.questions.map(function (x) {
         var title = true;
@@ -97070,13 +97102,15 @@ function (_Component) {
           className: "row justify-content-center"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "col-md-8"
-        }, x.before === null ? "" : _this3.showIntro(x.before), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        }, x.before === null ? "" : _this4.showIntro(x.before), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "card card-secondary card-outline"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: title ? "card-header text-bold" : "hidden"
-        }, x.question), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        }, x.question, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas " + _this4.mandatoryIcon(x.id)
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "card-body"
-        }, _this3.getAnswerType(x))))));
+        }, _this4.getAnswerType(x))))));
       });
     }
   }]);
@@ -97202,7 +97236,7 @@ function (_Component) {
     _this.getLoading = _this.getLoading.bind(_assertThisInitialized(_this));
     _this.showLoading = _this.showLoading.bind(_assertThisInitialized(_this));
     _this.state = {
-      _isLoading: true
+      _isLoading: _this.props.value.pages === 1 ? true : false
     };
     return _this;
   }
@@ -97238,7 +97272,7 @@ function (_Component) {
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container-fluid",
-        key: "page-" + this.props.data.id
+        key: "page-" + this.props.data.page
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row justify-content-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -97436,7 +97470,7 @@ function (_Component) {
         });
 
         return _this2.props.loadGroup(data);
-      });
+      }); // axios.get('http://geolocation-db.com/json/').then(res => {console.log(res.data)});
     }
   }, {
     key: "render",
@@ -97507,6 +97541,7 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Pagination).call(this, props));
     _this.next = _this.next.bind(_assertThisInitialized(_this));
+    _this.nextalert = _this.nextalert.bind(_assertThisInitialized(_this));
     _this.prev = _this.prev.bind(_assertThisInitialized(_this));
     return _this;
   }
@@ -97514,8 +97549,9 @@ function (_Component) {
   _createClass(Pagination, [{
     key: "next",
     value: function next() {
+      this.props.updateGroup();
+      console.log(this.props.value.group);
       var change = this.props.value.page === this.props.value.sections.length ? false : true;
-      console.log("next");
 
       if (change) {
         this.props.changeGroup(this.props.value.page + 1);
@@ -97523,6 +97559,11 @@ function (_Component) {
       }
 
       return change;
+    }
+  }, {
+    key: "nextalert",
+    value: function nextalert() {
+      console.log("alert");
     }
   }, {
     key: "prev",
@@ -97553,8 +97594,8 @@ function (_Component) {
         onClick: this.prev
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Prev")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        className: this.props.value.page === this.props.value.sections.length ? "btn btn-secondary" : "btn btn-info",
-        onClick: this.next
+        className: this.props.value.sections.length === this.props.value.group.page ? "btn btn-secondary" : this.props.value.group.complete ? "btn btn-info" : "btn btn-secondary",
+        onClick: this.props.value.group.complete ? this.next : this.nextalert
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Next"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Submit_js__WEBPACK_IMPORTED_MODULE_3__["default"], {
         show: this.props.value.page < this.props.value.sections.length ? "hidden" : ""
       }))));
@@ -97623,8 +97664,8 @@ function (_Component) {
         var section = _this.props.value.sections;
         var list = section.map(function (x) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-            key: 'progress' + x.id,
-            className: _this.props.value.page >= x.id + 1 ? "active" : ""
+            key: 'progress' + x.page,
+            className: _this.props.value.page >= x.page + 1 ? "active" : ""
           });
         });
         return list;
@@ -97670,6 +97711,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _reducers_actions_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../reducers/actions.js */ "./resources/js/reducers/actions.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_4__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -97680,13 +97725,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
 
 
 
@@ -97698,20 +97745,54 @@ function (_Component) {
   _inherits(Submit, _Component);
 
   function Submit(props) {
+    var _this;
+
     _classCallCheck(this, Submit);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Submit).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Submit).call(this, props));
+    _this.showAlert = _this.showAlert.bind(_assertThisInitialized(_this));
+    _this.state = {};
+    return _this;
   }
 
   _createClass(Submit, [{
+    key: "submit",
+    value: function submit(isReady) {
+      var _this2 = this;
+
+      if (isReady) {
+        axios.post("/api/submit", {
+          data: this.props.value.questions,
+          user: this.state
+        }).then(function (res) {
+          return res;
+        }).then(function (res) {
+          return res;
+        }).then(function (res) {
+          return _this2.alertOutro();
+        }).then(function (res) {
+          window.location.replace("/end");
+        });
+      }
+    }
+  }, {
+    key: "showAlert",
+    value: function showAlert() {
+      console.log('alert');
+    }
+  }, {
     key: "render",
     value: function render() {
-      var cname = this.props.value.submit ? "btn btn-submit" : "btn btn-secondary";
+      var isReady = this.props.value.questions.length === this.props.value.questions.filter(function (x) {
+        return x.answer;
+      }).length;
+      var cname = isReady ? "btn btn-info" : "btn btn-secondary";
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "btn-group btn-ready " + this.props.show
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        className: cname
+        className: cname,
+        onClick: this.submit.bind(this)
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Submit")));
     }
   }]);
@@ -97843,6 +97924,11 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         data: data
       });
     },
+    updateGroup: function updateGroup() {
+      return dispatch({
+        type: "UPDATE GROUP"
+      });
+    },
     checkSubmission: function checkSubmission() {
       return dispatch({
         type: "CHECK SUBMISSION"
@@ -97882,7 +97968,8 @@ var initialState = {
     visual: null,
     icon: "fas fa-stroopwafel fa-spin",
     show: true,
-    complete: false
+    complete: false,
+    page: 1
   }],
   questions: [{
     id: 1,
@@ -97891,7 +97978,8 @@ var initialState = {
     question: "Loading...",
     type: "text",
     show: true,
-    answer: false
+    answer: false,
+    page: 1
   }],
   submit: false,
   captcha: false,
@@ -97901,7 +97989,8 @@ var initialState = {
     visual: null,
     icon: "fas fa-stroopwafel fa-spin",
     show: true,
-    complete: false
+    complete: false,
+    page: 1
   },
   page: 1
 };
@@ -97911,9 +98000,9 @@ var showSection = function showSection(state, data, change) {
   var content = change ? state : data;
   var section = content.sections.map(function (x) {
     var show = false;
-    var complete = change ? false : x.complete;
+    var complete = change ? x.complete : false;
 
-    if (x.id === page) {
+    if (x.page === page) {
       show = true;
     }
 
@@ -97924,9 +98013,9 @@ var showSection = function showSection(state, data, change) {
   });
   var question = content.questions.map(function (x) {
     var show = false;
-    var answer = change ? false : x.answer;
+    var answer = change ? x.answer : false;
 
-    if (x.section_id === page) {
+    if (x.page === page) {
       show = true;
     }
 
@@ -97938,16 +98027,30 @@ var showSection = function showSection(state, data, change) {
   var group = section.find(function (x) {
     return x.show;
   });
+  var questionGroup = question.filter(function (x) {
+    return x.section_id === group.id;
+  });
+  var questionAnswered = questionGroup.filter(function (x) {
+    return x.answer;
+  });
+  var isComplete = questionGroup.length === questionAnswered.length;
+  var updatedGroup = group;
+
+  if (isComplete) {
+    updatedGroup = _objectSpread({}, updatedGroup, {
+      complete: true
+    });
+  }
+
   return _objectSpread({}, state, {
     sections: section,
     questions: question,
     page: page,
-    group: group
+    group: updatedGroup
   });
 };
 
-var reduceAnswer = function reduceAnswer(state, data) {
-  console.log(data);
+var updateAnswer = function updateAnswer(state, data) {
   return state.map(function (x) {
     if (x.id === data.id) {
       x.answer = data.answer;
@@ -97955,6 +98058,47 @@ var reduceAnswer = function reduceAnswer(state, data) {
 
     return x;
   });
+};
+
+var updateGroup = function updateGroup(group, questions) {
+  var questionAnswered = questions.filter(function (x) {
+    return x.answer;
+  });
+  var isComplete = questions.length === questionAnswered.length;
+  var updatedGroup = group;
+
+  if (isComplete) {
+    updatedGroup = _objectSpread({}, updatedGroup, {
+      complete: true
+    });
+  }
+
+  return updatedGroup;
+};
+
+var completeGroup = function completeGroup(state, data, group) {
+  var questionGroup = state.map(function (x) {
+    if (x.id === data.id) {
+      x.answer = data.answer;
+    }
+
+    return x;
+  }).filter(function (x) {
+    return x.section_id == group.id;
+  });
+  var questionAnswered = questionGroup.filter(function (x) {
+    return x.answer;
+  });
+  var isComplete = questionGroup.length === questionAnswered.length;
+  var updatedGroup = group;
+
+  if (isComplete) {
+    updatedGroup = _objectSpread({}, updatedGroup, {
+      complete: true
+    });
+  }
+
+  return updatedGroup;
 };
 
 var question = function question() {
@@ -97970,7 +98114,13 @@ var question = function question() {
 
     case 'REDUCE ANSWER':
       return _objectSpread({}, state, {
-        questions: reduceAnswer(state.questions, action.data)
+        questions: updateAnswer(state.questions, action.data),
+        group: completeGroup(state.questions, action.data, state.group)
+      });
+
+    case 'UPDATE GROUP':
+      return _objectSpread({}, state, {
+        group: updateGroup(state.group, state.questions)
       });
 
     case 'CHECK SUBMISSION':
