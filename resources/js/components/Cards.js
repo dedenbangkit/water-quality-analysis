@@ -31,7 +31,6 @@ class Cards extends Component {
         this.setState({
           [name]: value
         });
-        localStorage.setItem(name, value);
         this.props.reduceAnswer({
             id: parseInt(target.name.replace("answer-","")),
             answer: target.value
@@ -44,7 +43,6 @@ class Cards extends Component {
         this.setState({
           [name]: value
         });
-        localStorage.setItem(name, value);
         this.props.reduceAnswer({
             id: parseInt(name.replace("answer-","")),
             answer: value

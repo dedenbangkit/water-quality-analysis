@@ -44,7 +44,7 @@ class ApiController extends Controller
             "sections" => $sections,
             "questions" => $questions,
         ];
-        return $api;
+        return response()->json($api, 200, [], JSON_NUMERIC_CHECK);
     }
 
 	public function data(Request $request, Answer $answer) {

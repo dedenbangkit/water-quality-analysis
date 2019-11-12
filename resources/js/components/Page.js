@@ -18,7 +18,9 @@ class Page extends Component {
     componentDidMount() {
         axios.get('/api').then(
             (res) => {
-                let data = {...res.data, group: 1};
+                let resp = JSON.stringify(res.data);
+                resp = JSON.parse(resp);
+                let data = {...resp, group: 1};
                 return this.props.loadGroup(data)
             }
         );
