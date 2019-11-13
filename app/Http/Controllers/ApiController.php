@@ -21,21 +21,21 @@ class ApiController extends Controller
         $random_sections = [1, $firstgroup, $secondgroup];
         $pages = collect($random_sections)->map(function($x, $i){
             return array(
-                "page" => $i + 1,
-                "section_id" => $x
+                "page" => (int) $i + 1,
+                "section_id" => (int) $x
             );
         });
         $sections = $section->whereIn('id', $random_sections)->get();
         $sections = collect($sections)->map(function($x, $i){
-            $x['page'] = $i + 1;
+            $x['page'] = (int) $i + 1;
             $x['complete'] = false;
             return $x;
         })->toArray();
         $questions = $question->load('section')->with('option')->whereIn('section_id', $random_sections)->get();
         $questions = collect($questions)->map(function($x, $i) use ($pages){
             forEach($pages as $p) {
-                if ($p["section_id"] === $x["section_id"]) {
-                    $x["page"] = $p["page"];
+                if ((int) $p["section_id"] === (int) $x["section_id"]) {
+                    $x["page"] = (int) $p["page"];
                 }
             }
             return $x;
@@ -46,31 +46,6 @@ class ApiController extends Controller
         ];
         return response()->json($api, 200, [], JSON_NUMERIC_CHECK);
     }
-
-	public function data(Request $request, Answer $answer) {
-		$results = $answer->whereNotIn('question_id',[1,2,3,4])->with('question.section')->with('visitor.demography.question')->get();
-        $string = new \Illuminate\Support\Str();
-        $results = collect($results)->map(function($x, $key) use ($string){
-            $b = collect($x);
-            forEach($x->visitor->demography as $g) {
-                $qname = $string->lower($g["question"]["question"]);
-                $qname = $string->after($qname, "what is your general knowledge level of ");
-                $qname = $string->replaceLast('?','',$qname);
-                $qname = $string->snake($qname);
-                $b[$qname] = $g["value"];
-            }
-            $b["chart"] = $b["question"]["section"]["text"];
-            $b["os"] = $b["visitor"]["os"];
-            $b["device"] = $b["visitor"]["device"];
-            $b["browser"] = $b["visitor"]["browser"];
-            $b["question"] = $b["question"]["question"];
-            $b["date"] = $b["visitor"]["created_at"];
-            $b = $b->forget(["id","visitor", "section_id","question_id","visitor_id"]);
-            $b["id"] = $key + 1;
-            return $b->reverse()->flatten(0);
-        });
-        return array("data" => $results);
-	}
 
     public function submit(Request $request, Queue $queue, Visitor $visitor, WhichBrowser $provider) {
 		$user_agent = $request->header();
@@ -111,5 +86,59 @@ class ApiController extends Controller
 		}
 		return $request;
     }
+
+    public function data(Request $request, Visitor $visitors) {
+        $visitors = $visitors->with('answer.question.section')->get();
+        $visitors = collect($visitors)->map(function($visitor, $key) {
+            $visitor["id"] = (int) $key + 1;
+            foreach($visitor["answer"] as $answer) {
+                if ((int) $answer["question"]["section_id"] === 1){
+                    $question = $answer["question"]["id"];
+                }
+                if (in_array( (int) $answer["question"]["section_id"], [2,3,4,5]) ){
+                    $question = "Q1_".$answer["question"]["id"];
+                    $section = $answer["question"]["section"]["text"];
+                    $visitor["Q1_Chart"] = $section;
+                }
+                if (in_array( (int) $answer["question"]["section_id"], [6,7,8,9]) ){
+                    $question = "Q2_".$answer["question"]["id"];
+                    $section = $answer["question"]["section"]["text"];
+                    $visitor["Q2_Chart"] = $section;
+                }
+                $visitor[$question] = $answer["value"];
+
+                if ($visitor[$question] === "0") {
+                    $visitor[$question] = "Empty";
+                }
+            }
+            return collect($visitor)->forget(["answer", "updated_at"])->flatten();
+        })->toArray();
+        return array("data" => $visitors);
+    }
+
+	public function analysis(Request $request, Answer $answer) {
+		$results = $answer->whereNotIn('question_id',[1,2,3,4])->with('question.section')->with('visitor.demography.question')->get();
+        $string = new \Illuminate\Support\Str();
+        $results = collect($results)->map(function($x, $key) use ($string){
+            $b = collect($x);
+            forEach($x->visitor->demography as $g) {
+                $qname = $string->lower($g["question"]["question"]);
+                $qname = $string->after($qname, "what is your general knowledge level of ");
+                $qname = $string->replaceLast('?','',$qname);
+                $qname = $string->snake($qname);
+                $b[$qname] = $g["value"];
+            }
+            $b["chart"] = $b["question"]["section"]["text"];
+            $b["os"] = $b["visitor"]["os"];
+            $b["device"] = $b["visitor"]["device"];
+            $b["browser"] = $b["visitor"]["browser"];
+            $b["question"] = $b["question"]["question"];
+            $b["date"] = $b["visitor"]["created_at"];
+            $b = $b->forget(["id","visitor", "section_id","question_id","visitor_id"]);
+            $b["id"] = $key + 1;
+            return $b->reverse()->flatten(0);
+        });
+        return response()->json(array("data" =>$results), 200, [], JSON_NUMERIC_CHECK);
+	}
 
 }

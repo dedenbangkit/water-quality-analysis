@@ -21,7 +21,7 @@ class Submit extends Component {
 			axios.post("/api/submit", {data: this.props.value.questions, user: this.state})
 			.then( res => { return res; })
 			.then( res => { return res; })
-            .then( res => { window.location.replace("/end"); });
+            .then( res => { window.location.replace("/?page=end"); });
 		}
     }
 

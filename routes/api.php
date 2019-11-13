@@ -18,5 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/', 'ApiController@index');
-Route::get('/data', 'ApiController@data');
 Route::post('/submit', 'ApiController@submit');
+Route::get('/data', 'ApiController@data');
+Route::get('/analysis', 'ApiController@analysis');

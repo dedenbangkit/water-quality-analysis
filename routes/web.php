@@ -12,18 +12,13 @@
 */
 
 
-Route::get('/', function () {
-    return view('start');
-});
-
-Route::get('/survey', function () {
-    return view('survey');
-});
-
 Route::get('/end', function () {
     return view('thanks');
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+Route::get('/dashboard-analysis', 'DashboardController@analysis')->name('dashboard-analysis');
+Route::get('/', 'HomeController@index')->name('home');
+Route::get('/survey', 'HomeController@survey')->name('survey');

@@ -2,5 +2,6 @@
     "/js/app.js": "/js/app.js",
     "/js/home.js": "/js/home.js",
     "/css/app.css": "/css/app.css",
-    "/js/data.js": "/js/data.js"
+    "/js/data.js": "/js/data.js",
+    "/css/social-share-kit.css": "/css/social-share-kit.css"
 }

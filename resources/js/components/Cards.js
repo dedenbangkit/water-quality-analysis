@@ -82,13 +82,10 @@ class Cards extends Component {
 					<i className={"fas " + this.mandatoryIcon(answer.id) + " fas-center"}/>
 				</div>
                 <div className="row">
-                    <div className="col-sm-4 text-left text-bold slider-text">
+                    <div className="col-sm-6 text-left text-bold slider-text">
                         {guide[0]}
                     </div>
-                    <div className="col-sm-4 text-center text-bold slider-text">
-                        Neutral
-                    </div>
-                    <div className="col-sm-4 text-right text-bold slider-text">
+                    <div className="col-sm-6 text-right text-bold slider-text">
                         {guide[1]}
                     </div>
                 </div>
@@ -100,7 +97,6 @@ class Cards extends Component {
                   borderColor: '#c3c3c3',
                   height: 10,
                   width: 10,
-                  marginLeft: -14,
                   bottom: -6,
                   backgroundColor: '#fefefe',
                 }}
@@ -109,7 +105,6 @@ class Cards extends Component {
                   borderColor: '#c3c3c3',
                   height: 24,
                   width: 24,
-                  marginLeft: -14,
                   marginTop: -8,
                   backgroundColor: '#fefefe',
                 }}

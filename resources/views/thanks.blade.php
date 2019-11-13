@@ -23,12 +23,14 @@
 					<div class="col-md-8 col-sm-12">
 						<div class="card card-info">
 						<div class="card-header text-bold">
-							<h3 class="card-title"><i class="fas fa-handshake"></i> Survey is Over</h3>
+							<h3 class="card-title"><i class="fas fa-handshake"></i> Survey Completed</h3>
 						</div>
 						<div class="card-body" style="text-align:center;">
 							<img class="img img-fluid" src="https://www.knowitallninja.com/wp-content/uploads/2018/06/Intranet-Extranet-Internet-and-Cloud.jpg" />
 							<hr/>	
 							<h3 class="text-center"><i class="fas fa-handshake"></i> Thank you for your Participation</h3>
+                            <p>did you enjoy participating, then invite other friends by sharing this link: <a href="#">wqdatatviz.info</a></p>
+                            <div class="sharethis-inline-share-buttons"></div>
 						</div>
 						</div>
 					</div>

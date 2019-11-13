@@ -157,7 +157,7 @@ class SectionSeeder extends Seeder
         ]);
         $q5 =  new App\Question([
                 "question"=>"Obstructive Supportive",
-                "before"=>"Likert Scale Questions | Please assess the visualisation and indicate how you find regarding",
+                "before"=>"Please assess the visualisation by ticking a circle that most closely reflects your impression",
                 "type"=>"slider",
                 "mandatory"=>true,
         ]);
@@ -242,7 +242,7 @@ class SectionSeeder extends Seeder
         ]);
         $q5 =  new App\Question([
                 "question"=>"Obstructive Supportive",
-                "before"=>"Likert Scale Questions | Please assess the visualisation and indicate how you find regarding",
+                "before"=>"Please assess the visualisation by ticking a circle that most closely reflects your impression",
                 "type"=>"slider",
                 "mandatory"=>true,
         ]);

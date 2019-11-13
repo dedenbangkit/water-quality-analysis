@@ -1,3 +1,4 @@
+const source = window.location.pathname === "/dashboard" ? "/api/data" : "/api/analysis"
 $('#data').DataTable( {
     ajax: "/api/data",
     scrollX: true,
