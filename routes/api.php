@@ -21,3 +21,5 @@ Route::get('/', 'ApiController@index');
 Route::post('/submit', 'ApiController@submit');
 Route::get('/data', 'ApiController@data');
 Route::get('/analysis', 'ApiController@analysis');
+// Route::get('/getjson', 'ApiController@getjson');
+Route::get('/charts', 'ApiController@charts');

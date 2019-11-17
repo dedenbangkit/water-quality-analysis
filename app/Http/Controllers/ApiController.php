@@ -87,14 +87,36 @@ class ApiController extends Controller
 		return $request;
     }
 
-    public function data(Request $request, Visitor $visitors) {
+    public function data(Request $request, Visitor $visitors, Section $sections) {
         $visitors = $visitors->with('answer.question.section')->get();
-        $visitors = collect($visitors)->map(function($visitor, $key) {
+        $visitors = collect($visitors)->map(function($visitor, $key) use ($sections) {
             $visitor["id"] = (int) $key + 1;
             foreach($visitor["answer"] as $answer) {
                 if ((int) $answer["question"]["section_id"] === 1){
                     $question = $answer["question"]["id"];
                 }
+                $visitor[$question] = $answer["value"];
+                if ((int) $answer["question"]["section_id"] !== 1) {
+                    $defaults = $sections->with('question')->find((int) $answer["question"]["section_id"]);
+                    if (in_array( (int) $answer["question"]["section_id"], [2,3,4,5]) ){
+                        $section = $answer["question"]["section"]["text"];
+                        $visitor["Q1_Chart"] = $section;
+                        foreach($defaults["question"] as $default) {
+                            $default = "Q1_".$default["id"];
+                            $visitor[$default] = "Empty";
+                        }
+                    }
+                    if (in_array( (int) $answer["question"]["section_id"], [6,7,8,9]) ){
+                        $section = $answer["question"]["section"]["text"];
+                        $visitor["Q2_Chart"] = $section;
+                        foreach($defaults["question"] as $default) {
+                            $default = "Q2_".$default["id"];
+                            $visitor[$default] = "Empty";
+                        }
+                    }
+                }
+            }
+            foreach($visitor["answer"] as $answer) {
                 if (in_array( (int) $answer["question"]["section_id"], [2,3,4,5]) ){
                     $question = "Q1_".$answer["question"]["id"];
                     $section = $answer["question"]["section"]["text"];
@@ -103,17 +125,18 @@ class ApiController extends Controller
                 if (in_array( (int) $answer["question"]["section_id"], [6,7,8,9]) ){
                     $question = "Q2_".$answer["question"]["id"];
                     $section = $answer["question"]["section"]["text"];
-                    $visitor["Q2_Chart"] = $section;
                 }
                 $visitor[$question] = $answer["value"];
-
-                if ($visitor[$question] === "0") {
+                if ($visitor[$question] === "0" || $visitor[$question] === 0) {
                     $visitor[$question] = "Empty";
                 }
             }
             return collect($visitor)->forget(["answer", "updated_at"])->flatten();
         })->toArray();
-        return array("data" => $visitors);
+        $data = array("data" => $visitors);
+        // $json = json_encode($data, JSON_NUMERIC_CHECK);
+        // file_put_contents(base_path('public/json/data.json'), stripslashes($json));
+        return response()->json($data, 200, [], JSON_BIGINT_AS_STRING);
     }
 
 	public function analysis(Request $request, Answer $answer) {
@@ -140,5 +163,30 @@ class ApiController extends Controller
         });
         return response()->json(array("data" =>$results), 200, [], JSON_NUMERIC_CHECK);
 	}
+
+    public function charts(Request $request, Question $questions) {
+        $data = $questions->whereIn("type", ["slider","option"])
+                          ->with('section')
+                          ->with('answer')
+                          ->with('option')->get();
+        $data = collect($data)->map(function($arr) {
+            $arr["chart"] = $arr["section"]["text"];
+            $arr["options"] = collect($arr["option"])->groupBy("text");
+            foreach ($arr["options"] as $key => $value) {
+                $arr["options"][$key] = 0;
+            }
+            $arr["answers"] = collect($arr["answer"])->groupBy("value");
+            foreach ($arr["answers"] as $key => $value) {
+                $arr["answers"][$key] = collect($value)->count();
+            }
+            $arr["value"] = collect($arr["options"])->merge($arr["answers"]);
+            if($arr["type"] === "slider") {
+                $arr["value"] = $arr["answers"];
+            }
+            $forgotten = ["answer","section", "before", "mandatory", "type", "section_id", "options", "option","answers"];
+            return collect($arr)->forget($forgotten);
+        })->toArray();
+        return collect($data)->groupBy("chart");
+    }
 
 }
